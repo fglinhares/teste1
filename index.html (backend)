@@ -1,0 +1,242 @@
+<p><strong>API Conta 4all (Versão 2.11)</strong></p>
+
+<h1 id="1-introdu-o">1. Introdução</h1>
+
+<h2 id="1-1-mensageria">1.1. Mensageria</h2>
+
+<h3 id="1-1-1-comunica-o-com-tls">1.1.1 Comunicação com TLS</h3>
+
+<p>Toda comunicação com o servidor 4all deve ser protegida por TLS 1.2 ou posterior. O certificado fornecido
+pelo servidor sempre deve ser inspecionado para confirmar que se trata de um certificado confiável.</p>
+
+<h3 id="1-1-2-mensagens-http">1.1.2 Mensagens HTTP</h3>
+
+<p>Os headers HTTP devem indicar ‘ContentType’
+como ‘application/json’. O header ‘Accept’ deve ser usado e
+deve indicar ‘application/json’.</p>
+
+<h3 id="1-1-3-respostas-de-sucesso">1.1.3 Respostas de sucesso</h3>
+
+<p>Respostas de sucesso podem possuir ou não conteúdo. Quando possuem conteúdo retornam status 200.
+Quando não possuem conteúdo retornam status 204.</p>
+
+<h3 id="1-1-4-respostas-de-erro">1.1.4 Respostas de erro</h3>
+<pre class="highlight json"><code><span class="err">#Exemplo</span><span class="w"> </span><span class="err">de</span><span class="w"> </span><span class="err">resposta:</span><span class="w">
+</span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"30.17"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Parse error"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<p>Erros podem ser identificados pelo código de status HTTP 4xx (client error) ou 5xx (server error).
+O corpo da resposta de erro pode conter um JSON onde existe um objeto ‘error’, que possui os campos ‘code’
+(com um string de erro para ser usado ‘internamente’ pela 4all) e um campo ‘message’ (com uma mensagem
+que pode e deve ser exibida ao usuário final).</p>
+
+<h3 id="1-1-5-evolu-o-do-formato-de-mensagens">1.1.5 Evolução do formato de mensagens</h3>
+
+<p>O frontend deve estar preparado para receber campos extras/novos/não previstos nas mensagens sem que
+isto cause erros. Conforme o protocolo evoluir, campos podem ser adicionados nas mensagens, e o frontend
+não deve parar de funcionar por causa disso. É aceitável e esperado, entretanto, que campos faltando gerem
+erros.
+5</p>
+
+<h3 id="1-1-6-endere-os-dos-servidores-de-testes-e-de-produ-o">1.1.6 Endereços dos servidores de testes e de produção</h3>
+
+<p>Os seguintes endpoints devem ser usados para executar as chamadas:</p>
+
+<table><thead>
+<tr>
+<th>Ambiente</th>
+<th>URL</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Testes</td>
+<td><code class="prettyprint">conta.test.4all.com</code></td>
+</tr>
+<tr>
+<td>Produção</td>
+<td><code class="prettyprint">conta.api.4all.com</code></td>
+</tr>
+</tbody></table>
+
+<p>Os serviços sempre devem ser acessados usando TLS, na porta 443. Na prática, os endpoints acima sempre
+serão precedidos de &ldquo; https:// &rdquo;.</p>
+
+<h3 id="1-1-7-particularidades-das-mensagens">1.1.7. Particularidades das mensagens</h3>
+
+<p>Alguns campos das requisições são padrão:</p>
+
+<ul>
+<li><p><strong><em>geolocation</em></strong> é um objeto contendo informações de geolocalização do device. Quando não for possível
+determinar a posição do dispositivo (por exemplo: usuário negou a permissão), a mensagem deve
+omitir este objeto.</p></li>
+<li><p><strong><em>device</em></strong> é um objeto contendo as informações do dispositivo que está acessando a conta 4all.</p></li>
+<li><p><strong><em>itemIndex</em></strong> aparece em chamadas que retornam listas de itens, e indica o índice do primeiro item a ser
+retornado pelo servidor.</p></li>
+<li><p><strong><em>itemCount</em></strong> também aparece em chamadas que retornam listas de itens, e indica quantos itens devem
+ser retornados pelo servidor.
+A geolocalização não é obrigatória nas requisições, mas se estiver presente deve seguir o seguinte formato:</p></li>
+</ul>
+
+<h1 id="2-api-de-identifica-o">2. API de Identificação</h1>
+
+<h2 id="2-1-cadastro-e-login">2.1. Cadastro e Login</h2>
+
+<h3 id="2-1-1-start-customer-creation">2.1.1. Start Customer Creation</h3>
+
+<p><strong>Caminho:</strong> <code class="prettyprint">endpoint/customer/startCustomerCreation</code></p>
+
+<p><strong>Descrição:</strong> Esta chamada é usada para iniciar o processo de cadastro de um novo <em>customer</em>.</p>
+
+<p><strong>Requisição:</strong></p>
+
+<blockquote>
+<p>Exemplo de solicitação:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"emailAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mail@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"phoneNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"555199999999"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"applicationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5366"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sendSms"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"device"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"deviceType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"deviceModel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iPhone 5C"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"osVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iOS 8.1.1"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"geolocation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">37.123123</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-127.123123</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"accuracy"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<table><thead>
+<tr>
+<th>Campo</th>
+<th>Descrição</th>
+<th>Formato</th>
+<th>Tam</th>
+<th>Obrigatório</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>emailAddress</td>
+<td>Endereço de email.</td>
+<td>String</td>
+<td>200</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>Número do telefone celular.DDI + DD + 8/9 dígitos</td>
+<td>String</td>
+<td>20</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>applicationId</td>
+<td>Identifica o app/software que o customer está usando para se cadastrar.</td>
+<td>String</td>
+<td>15</td>
+<td>não</td>
+</tr>
+<tr>
+<td>sendSms</td>
+<td>Quando presente e com valor t rue , a chamada com sucesso a esta rotina causa o envio de um SMS com o desafio para criação de conta.</td>
+<td>Boolean</td>
+<td></td>
+<td>não</td>
+</tr>
+<tr>
+<td>requestVaultKey</td>
+<td>Quando presente e com valor t rue , o retorno desta chamada incluirá uma chave de acesso externo ao cofre de cartões (vault).</td>
+<td>Boolean</td>
+<td></td>
+<td>não</td>
+</tr>
+<tr>
+<td>device</td>
+<td>Informações sobre o dispositivo.</td>
+<td>Object</td>
+<td>*</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>geolocation</td>
+<td>Geolocalização</td>
+<td>Object</td>
+<td>*</td>
+<td>não</td>
+</tr>
+</tbody></table>
+
+<p><strong>Resposta:</strong></p>
+
+<blockquote>
+<p>Exemplo de resposta:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"creationToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JsFbKkyhM+q05nSKB..."</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"pinRequired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<table><thead>
+<tr>
+<th>Campo</th>
+<th>Descrição</th>
+<th>Formato</th>
+<th>Tam</th>
+<th>Presente</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>creationToken</td>
+<td>Chave utilizada para concluir o processo de criação de um customer.</td>
+<td>String</td>
+<td>44</td>
+<td>sempre</td>
+</tr>
+<tr>
+<td>accessKey</td>
+<td>Chave de acesso temporária ao vault para a realização do cadastro de um cartão. Presente na resposta somente se solicitado através do parâmetro <strong>requestVaultKey</strong> da requisição.</td>
+<td>String</td>
+<td>44</td>
+<td>depende</td>
+</tr>
+<tr>
+<td>pinRequired</td>
+<td>Indica se é obrigatória a criação de um PIN durante a criação de uma nova conta.</td>
+<td>Boolean</td>
+<td></td>
+<td>sempre</td>
+</tr>
+</tbody></table>
+
+<p><strong>Observações:</strong></p>
+
+<ul>
+<li><p>Caso o email ou telefone indicados pelo cliente já estejam em uso por outra conta a tiva, a criação de
+usuário deve falhar.</p></li>
+<li><p>Uma conta somente se torna a tiva quando for concluído o seu processo de criação, através de uma
+chamada com sucesso a complete customer creation .</p></li>
+<li><p>O parâmetro da resposta c reationToken expira em 48 horas; após este período, será necessário
+chamar esta funcionalidade novamente.</p></li>
+<li><p>Quando s endSms for t rue , a chamada com sucesso desta rotina provoca o envio de um SMS ao cliente, contendo um desafio de 6 dígitos, que deve ser informado em c omplete customer creation. Mesmo quando o SMS não é enviado automaticamente ao cliente, ainda será necessário que um desafio de 6 dígitos seja usado em c omplete customer creation a rotina s end login sms pode ser usada para que o desafio seja enviado.</p></li>
+<li><p>O processo de criação da conta não pode ser concluído sem que se use um desafio de SMS. Não é permitida a existência de um cliente no sistema com um telefone não confirmado.</p></li>
+</ul>
+
+<aside class="success">
+* O parâmetro a ccessKey da resposta contém uma chave de acesso temporário ao cofre de cartões, que deve ser utilizada pelo frontend para realizar o cadastro de um novo cartão diretamente no cofre, usando a chamada prepare card (consultar o Anexo C ).
+</aside>
