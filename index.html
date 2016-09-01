@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>4 Pay - Checkout 4all</title>
+    <title>4 Pay - Digital Commerce</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;XML&quot;,&quot;Javascript&quot;]">
+  <body class="index" data-languages="[&quot;HTML&quot;,&quot;Javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -101,7 +101,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="XML">XML</a>
+              <a href="#" data-language-name="HTML">HTML</a>
               <a href="#" data-language-name="Javascript">Javascript</a>
         </div>
         <div class="search">
@@ -118,13 +118,13 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <p><strong>4 Pay - Checkout 4all</strong></p>
+        <p><strong>4 Pay - Digital Commerce</strong></p>
 
 <p>Manual de Uso - Web/Javascript - Versão 0.1</p>
 
-<h1 id="1-introdu-o">1. Introdução</h1>
+<h1 id="1-introdu-o">1 Introdução</h1>
 
-<p>Com o Checkout 4all, você pode configurar seu website para aceitar pagamentos de cartões de crédito e débito de maneira fácil e rápida.</p>
+<p>Com o 4 Pay - Digital Commerce, você pode configurar seu website para aceitar pagamentos de cartões de crédito e débito de maneira fácil e rápida.</p>
 
 <p>Para aceitar pagamentos de Cartão em seu site, você só precisa executar dois passos:</p>
 
@@ -133,20 +133,23 @@
 <li>Capturar a transação no seu servidor.</li>
 </ol>
 
-<h1 id="2-pagamentos">2. Pagamentos</h1>
+<p>2 Chaves de API
+TODO: <Colocar procedimento de como obter as chaves no Portal do EC></p>
 
-<h2 id="2-1-janela-de-checkout">2.1 Janela de Checkout</h2>
+<h1 id="3-pagamentos">3 Pagamentos</h1>
 
-<p>A Janela de Checkout é apresentada quando o cliente confirma a compra (no submit do formulário de fechar pedido, por exemplo) ou seleciona a forma de pagamento “Cartão de Crédito ou Débito via 4all” (quando o seu site permite mais de uma forma de pagamento). </p>
+<h2 id="3-1-janela-de-checkout">3.1 Janela de Checkout</h2>
 
-<p>O dialog permite que o usuário informe os dados do cartão ou se autentique com sua Conta 4all para buscar seus dados de pagamento já cadastrado. </p>
+<p>A Janela de Checkout é apresentada quando o cliente confirma a compra (no <em>submit</em> do formulário de fechar pedido, por exemplo) ou seleciona a forma de pagamento &ldquo;Cartão de Crédito ou Débito via 4all&rdquo; (quando o seu site permite mais de uma forma de pagamento). </p>
+
+<p>O <em>dialog</em> permite que o usuário informe os dados do cartão ou se autentique com sua Conta 4all para buscar seus dados de pagamento já cadastrado. </p>
 
 <p><TODO: inserir imagem do dialog sobre um site de compras>
 <TODO: no site, inserir botão com demo do dialog></p>
 
 <p>Você pode inserir o Dialog no seu site de duas maneiras: via <strong>Embedded Form</strong>, ou via <strong>Biblioteca Javascript</strong>.</p>
 
-<h3 id="2-1-1-embedded-form">2.1.1 Embedded Form</h3>
+<h3 id="3-1-1-embedded-form">3.1.1 Embedded Form</h3>
 
 <blockquote>
 <p>Inclua o código do checkout na sua página, como no exemplo:</p>
@@ -156,12 +159,10 @@
   &lt;!-- … demais inputs do formulário … --&gt;
 
   &lt;script
-    src="endereco_4all_checkout" id="checkout-4all"
-    data-token="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
-    data-items="[{descricao:"Camiseta Polo Tam P", valor: 5999}]"
+    src="endereco_4all_checkout"
+    data-public-api-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
     data-amount="5999"
-    data-merchant="Loja do Alfredo"
-    data-logo="http://urlDoSeuLogotipo/logo.png"&gt;
+    &gt;
   &lt;/script&gt;
 &lt;/form&gt;
 </code></pre>
@@ -183,10 +184,16 @@
 </tr>
 </thead><tbody>
 <tr>
-<td>data-merchant-key</td>
-<td>Token de identifição 4all.</td>
+<td>data-public-api-key</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Chave de API pública do Checkout 4all.</td>
 <td>String</td>
 <td>Sim</td>
+<td></td>
 </tr>
 <tr>
 <td>data-amount</td>
@@ -194,40 +201,32 @@
 <td>String</td>
 <td>Sim</td>
 </tr>
-<tr>
-<td>data-merchant</td>
-<td>Nome da loja que está efetuando a venda.</td>
-<td>String</td>
-<td>Sim</td>
-</tr>
-<tr>
-<td>data-card-type</td>
-<td>Tipos aceitos de cartão. (1 para apenas crédito, 2 para apenas débito e 0 para ambos).</td>
-<td>String</td>
-<td>Não</td>
-</tr>
-<tr>
-<td>data-logo</td>
-<td>URL completa do logotipo da sua empresa.</td>
-<td>String</td>
-<td>Não</td>
-</tr>
 </tbody></table>
 
-<h3 id="2-1-2-biblioteca-javascript">2.1.2 Biblioteca Javascript</h3>
+<h3 id="3-1-2-biblioteca-javascript">3.1.2 Biblioteca Javascript</h3>
 <pre class="highlight plaintext"><code>&lt;script src="endereco_4all_checkout"&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Para fazer a integração via javascript, você deve primeiramente importar o arquivo da biblioteca na sua página, adicionando a seguinte linha ao seu HTML:</p>
-<pre class="highlight plaintext"><code>Checkout4all.startCheckout(amount, checkoutApiKey, options, function (paymentToken){
+<pre class="highlight plaintext"><code>function onSuccess(paymentToken) {
+  //esta função será chamada ao completar o checkout
+}
 
-  //este código será executado após a confirmação do pagamento pelo  
-  //usuário
+function onCancel() {
+  // esta funcão será chamada caso o cliente cancele o checkout
+}
 
-});
+Var options = {
+  amount: 2500,
+  publicApiKey: "pk_test_6pRNASCoBOKtIshFeQd4XMUh",
+  successCallback: onSuccess,
+  cancelCallback: onCancel
+};
+
+Checkout4all.startCheckout(options);
 </code></pre>
 
-<p>Após isso, a biblioteca está disponível em seu escopo global como &lsquo;Checkout4all&rsquo;. Para iniciar o processo de login/pagamento, basta chamar a função startCheckout da biblioteca.:</p>
+<p>Após isso, a biblioteca está disponível em seu escopo global como &lsquo;Checkout4all&rsquo;. Para iniciar o processo de login/pagamento, basta chamar a função <strong>startCheckout</strong> da biblioteca.:</p>
 
 <p>Os parâmetros dessa função são:</p>
 
@@ -246,7 +245,7 @@
 <td>Sim</td>
 </tr>
 <tr>
-<td>chckoutPublicApiKey</td>
+<td>publicApiKey</td>
 <td>Chave de API pública do Checkout 4all.</td>
 <td>String</td>
 <td>Sim</td>
@@ -283,17 +282,12 @@
 
 <p><strong>Nota:</strong> por motivos de segurança, você deve informar o valor total da transação novamente nesta chamada.</p>
 
-<p>Exemplos:</p>
-
-<p><code class="prettyprint">
+<p>Exemplos:
+<code class="prettyprint">
 curl -X POST &quot;https://api.pagar.me/1/transactions/{TOKEN}/capture&quot;
   -d &#39;amount=1000&#39;
   -d &#39;api_key=ak_test_grXijQ4GicOa2BLGZrDRTR5qNQxJW0&#39;
 </code></p>
-
-<aside class="success">
-* O parâmetro a ccessKey da resposta contém uma chave de acesso temporário ao cofre de cartões, que deve ser utilizada pelo frontend para realizar o cadastro de um novo cartão diretamente no cofre, usando a chamada prepare card (consultar o Anexo C ).
-</aside>
 
           <h1 id="errors">Errors</h1>
 
@@ -356,7 +350,7 @@ curl -X POST &quot;https://api.pagar.me/1/transactions/{TOKEN}/capture&quot;
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="XML">XML</a>
+                <a href="#" data-language-name="HTML">HTML</a>
                 <a href="#" data-language-name="Javascript">Javascript</a>
           </div>
       </div>
